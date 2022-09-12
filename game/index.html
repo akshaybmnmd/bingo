@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo</title>
+    <link rel="shortcut icon" href="https://cdn-icons-mp4.flaticon.com/512/6172/6172532.mp4">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <style>
+        .bingo_table {
+            width: 15%;
+            text-align: center;
+        }
+
+        .bingo_table td{
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="bingo">Bingo</div>
+    <br>
+    <br>
+    <div class="bingo_table_div">
+        <table class="table table-bordered bingo_table">
+            <tbody>
+                <tr>
+                    <td class="1_1"></td>
+                    <td class="1_2"></td>
+                    <td class="1_3"></td>
+                    <td class="1_4"></td>
+                    <td class="1_5"></td>
+                </tr>
+                <tr>
+                    <td class="2_1"></td>
+                    <td class="2_2"></td>
+                    <td class="2_3"></td>
+                    <td class="2_4"></td>
+                    <td class="2_5"></td>
+                </tr>
+                <tr>
+                    <td class="3_1"></td>
+                    <td class="3_2"></td>
+                    <td class="3_3"></td>
+                    <td class="3_4"></td>
+                    <td class="3_5"></td>
+                </tr>
+                <tr>
+                    <td class="4_1"></td>
+                    <td class="4_2"></td>
+                    <td class="4_3"></td>
+                    <td class="4_4"></td>
+                    <td class="4_5"></td>
+                </tr>
+                <tr>
+                    <td class="5_1"></td>
+                    <td class="5_2"></td>
+                    <td class="5_3"></td>
+                    <td class="5_4"></td>
+                    <td class="5_5"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+<script src="../js/game.js?v=1.71" defer></script>
+
+</html>
