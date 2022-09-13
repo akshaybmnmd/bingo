@@ -8,6 +8,8 @@ var last = [];
 let c = [];
 var ready = false;
 var point = 0;
+var ran_no = getRandomInt(100);
+move = false;
 
 function getRandomInt(max) {
     min = 1;
@@ -30,10 +32,18 @@ for (i = 1; i < 6; i++) {
 }
 
 $(".bingo_table td").click(c => {
-    if (c.target.innerText != "*") {
-        click_action(c.target.className);
-        let num = association_obj[c.target.className];
-        push('action', num, c.target.className, 'click', '');
+    if (move) {
+        clicked_no = c.target.innerText;
+        if (clicked_no != "*") {
+            click_action(c.target.className);
+            let num = association_obj[c.target.className];
+            push('action', num, c.target.className, 'click', '');
+            move = false;
+            $("#move_of").text("Opponent's move.");
+            $("#called_num").text("Number: " + clicked_no);
+        }
+    } else {
+        console.log("not your move!");
     }
 });
 
@@ -99,9 +109,10 @@ function checkBingo(axix) {
         }
     }
     if (point > 4) {
-        alert("bingo!!!");
         push('notify', null, null, 'win', 'This user winned.');
     }
+
+    $("#point").text("Point: " + point);
 }
 
 $("#bingo").text("Bingo (" + code + ")");
@@ -118,11 +129,19 @@ channel.bind('game-join-' + code, function (data) {
     data = data.data;
     if (data.Gname != gameName && data.Gname != undefined) {
         if (!ready) {
-            push('join', null, null, 'ready', '');
+            push('join', null, null, 'ready', ran_no);
             ready = true;
             alert(data.Gname + " joined the game.");
         }
         if (data.type == "ready") {
+            if (data.message == ran_no) {
+                window.location.reload();
+            }
+            if (data.message > ran_no) {
+                push('action', null, null, 'first_move', null);
+                move = true;
+                $("#move_of").text("Your move.");
+            }
             if (!ready) {
                 ready = true;
             }
@@ -136,6 +155,13 @@ channel.bind('game-action-' + code, function (data) {
         if (data.type == "click") {
             cls = association_obj_rev[data.number];
             click_action(cls);
+            move = true;
+            $("#move_of").text("Your move.");
+            $("#called_num").text("Number: " + data.number);
+        }
+        if (data.type == "first_move") {
+            move = false;
+            $("#move_of").text("Opponent's move.");
         }
     }
 });
