@@ -7,11 +7,7 @@ var association_obj_rev = {};
 var last = [];
 let c = [];
 var ready = false;
-// var count = 1;
-
-// for(i=1;i<26;i++){
-
-// }
+var point = 0;
 
 function getRandomInt(max) {
     min = 1;
@@ -28,16 +24,17 @@ for (i = 1; i < 6; i++) {
         f_r_copy.splice(key, 1);
         association_obj[i + "_" + j] = num;
         association_obj_rev[num] = i + "_" + j;
-        // count++
     }
     last.push(c);
     c = [];
 }
 
 $(".bingo_table td").click(c => {
-    click_action(c.target.className);
-    let num = association_obj[c.target.className];
-    push('action', num, c.target.className, 'click', '');
+    if (c.target.innerText != "*") {
+        click_action(c.target.className);
+        let num = association_obj[c.target.className];
+        push('action', num, c.target.className, 'click', '');
+    }
 });
 
 function click_action(cls) {
@@ -45,10 +42,66 @@ function click_action(cls) {
     td.text("*");
     var axix = td[0].className.split("_");
     checkBingo(axix);
+    td[0].addEventListener("click", function () { }, false);
+    td[0].style.cursor = "not-allowed";
 }
 
 function checkBingo(axix) {
-    last[axix[0] - 1][axix[1] - 1] = 1;
+    let x = axix[0] - 1;
+    let y = axix[1] - 1;
+    last[x][y] = 1;
+    if (x == y) {
+        let tot_xey = 0;
+        for (i = 0; i < 5; i++) {
+            tot_xey += last[i][i];
+            if (tot_xey == 5) {
+                point++;
+            }
+        }
+    }
+    if (x + y == 4) {
+        let tot_xny = 0;
+        for (j = 0; j < 5; j++) {
+            tot_xny += last[j][4 - j];
+            if (tot_xny == 5) {
+                point++;
+            }
+        }
+    }
+    if (x == y && x + y == 4) {
+        let tot_xey = 0;
+        for (i = 0; i < 5; i++) {
+            tot_xey += last[i][i];
+            if (tot_xey == 5) {
+                point++;
+            }
+        }
+        let tot_xny = 0;
+        for (j = 0; j < 5; j++) {
+            tot_xny += last[j][4 - j];
+            if (tot_xny == 5) {
+                point++;
+            }
+        }
+    }
+    let tot_x = 0;
+    for (i = 0; i < 5; i++) {
+        tot_x += last[i][y];
+        if (tot_x == 5) {
+            point++;
+        }
+    }
+    let tot_y = 0;
+    for (j = 0; j < 5; j++) {
+        tot_y += last[x][j];
+        if (tot_y == 5) {
+            point++;
+        }
+    }
+    if (point > 4) {
+        alert("bingo!!!");
+        push('notify', null, null, 'win', 'This user winned.');
+    }
 }
 
 $("#bingo").text("Bingo (" + code + ")");
@@ -88,7 +141,12 @@ channel.bind('game-action-' + code, function (data) {
 });
 
 channel.bind('game-notify-' + code, function (data) {
-    console.error("Notify event", data);
+    data = data.data;
+    if (data.type == "win") {
+        alert("User " + data.Gname + " win the match.");
+    } else {
+        console.log("Notify event", data);
+    }
 });
 
 channel.bind('game-event-' + code, function (data) {
@@ -111,7 +169,6 @@ function push(event = 'non', number, col_id, type, message) {
         },
         type: "POST"
     }).done(data => {
-        // console.log("sucess", data);
     }).fail(e => {
         console.error("failed", e);
     });
